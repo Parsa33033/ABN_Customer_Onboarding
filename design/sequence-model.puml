@@ -1,0 +1,74 @@
+@startuml
+title Onboard Customer - Application / Domain / Infrastructure
+
+participant "Application" as App
+participant "OnboardCustomerService (Domain)" as Domain
+participant "FilePersistenceOperation (Domain)" as FPO
+participant "FilePersistenceRepository (Infra)" as FPR
+participant "CreateCustomerOperation (Domain)" as CCO
+participant "CustomerRepository (Infra)" as CR
+
+App -> Domain : onboardCustomer(request)
+activate Domain
+
+Domain -> FPO : persist(file)
+activate FPO
+
+FPO -> FPR : persist(file)
+activate FPR
+
+alt persist unsuccessful
+    FPR --> FPO : error
+    deactivate FPR
+
+    FPO --> Domain : error
+    deactivate FPO
+
+    Domain --> App : error
+    deactivate Domain
+else persist successful
+    FPR --> FPO : success
+    deactivate FPR
+
+    FPO --> Domain : filePersisted
+    deactivate FPO
+
+    Domain -> CCO : create(customer)
+    activate CCO
+
+    CCO -> CR : save(customer)
+    activate CR
+
+    alt save unsuccessful
+        CR --> CCO : error
+        deactivate CR
+
+        CCO -> FPO : delete(file)
+        activate FPO
+
+        FPO -> FPR : delete(file)
+        activate FPR
+        FPR --> FPO : deleted
+        deactivate FPR
+
+        FPO --> CCO : deleted
+        deactivate FPO
+
+        CCO --> Domain : error
+        deactivate CCO
+
+        Domain --> App : error
+        deactivate Domain
+    else save successful
+        CR --> CCO : saved
+        deactivate CR
+
+        CCO --> Domain : success
+        deactivate CCO
+
+        Domain --> App : success
+        deactivate Domain
+    end
+end
+
+@enduml

@@ -1,0 +1,101 @@
+package nl.abc.onboarding.customer.infrastructure.filestorage;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+
+public class FileStorage {
+
+    private final Path idBase;
+    private final Path picBase;
+
+    public FileStorage(String idPath,String picPath) {
+        this.idBase = Path.of(idPath);
+        this.picBase = Path.of(picPath);
+    }
+
+    /**
+     * Persist an image MultipartFile as PNG using the provided UUID as filename.
+     * Validates the file is an image and converts it to PNG.
+     * Returns a CompletableFuture that completes with the full absolute file path (including UUID + .png).
+     */
+    public CompletableFuture<String> persist(MultipartFile file, UUID uuid, FileType fileType) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                if (file == null || file.isEmpty()) {
+                    throw new IllegalArgumentException("File is empty");
+                }
+
+                String contentType = file.getContentType();
+                if (contentType == null || !contentType.toLowerCase().startsWith("image/")) {
+                    throw new IllegalArgumentException("Uploaded file is not an image");
+                }
+
+                // read image to ensure it's valid
+                BufferedImage image;
+                try (InputStream is = file.getInputStream()) {
+                    image = ImageIO.read(is);
+                }
+                if (image == null) {
+                    throw new IllegalArgumentException("Uploaded file is not a readable image");
+                }
+
+                Path targetDir = chooseBase(fileType);
+                Files.createDirectories(targetDir);
+
+                Path targetFile = targetDir.resolve(uuid.toString() + ".png");
+
+                // convert/write as PNG
+                boolean written = ImageIO.write(image, "png", targetFile.toFile());
+                if (!written) {
+                    // fallback: copy raw bytes if write failed (rare)
+                    try (InputStream is = file.getInputStream()) {
+                        Files.copy(is, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
+
+                return targetFile.toAbsolutePath().toString();
+            } catch (IOException e) {
+                throw new CompletionException(e);
+            }
+        });
+    }
+
+    /**
+     * Delete a file given its full path. Returns a CompletableFuture that completes when deletion succeeds,
+     * or completes exceptionally if the file does not exist or cannot be deleted.
+     */
+    public CompletableFuture<Void> delete(String fullPath) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                if (fullPath == null || fullPath.isBlank()) {
+                    throw new IllegalArgumentException("fullPath must not be null or blank");
+                }
+                Path targetFile = Path.of(fullPath);
+                if (!Files.exists(targetFile) || !Files.isRegularFile(targetFile)) {
+                    throw new IOException("File does not exist: " + fullPath);
+                }
+                Files.delete(targetFile);
+            } catch (IOException e) {
+                throw new CompletionException(e);
+            }
+        });
+    }
+
+    private Path chooseBase(FileType fileType) {
+        return switch (fileType) {
+            case ID -> idBase;
+            case PIC -> picBase;
+            default -> throw new IllegalArgumentException("Unsupported file type: " + fileType);
+        };
+    }
+}
