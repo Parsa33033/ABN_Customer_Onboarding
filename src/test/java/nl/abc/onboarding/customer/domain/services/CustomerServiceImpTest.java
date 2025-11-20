@@ -2,6 +2,7 @@ package nl.abc.onboarding.customer.domain.services;
 
 import nl.abc.onboarding.customer.domain.ports.dtos.AddressData;
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.DomainEntityException;
 import nl.abc.onboarding.customer.domain.ports.incoming.CustomerService;
 import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerRepository;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class CustomerServiceImpTest {
@@ -78,6 +80,14 @@ public class CustomerServiceImpTest {
                 new CustomerServiceImpl(customerRepository);
     }
 
+
+    /* ***************
+     * Success Scenarios
+     * ***************
+     */
+
+
+
     @Test
     public void testOnboardSuccessful_ReturnedAnAlreadyFoundCustomer() {
         // GIVEN a customer already exists with the external identifier
@@ -141,5 +151,70 @@ public class CustomerServiceImpTest {
                 () -> Assertions.assertEquals(expected.photoPath(), actual.photoPath())
         );
 
+    }
+
+
+    /* ***************
+     * functional error Scenarios
+     * ***************
+     */
+
+    @Test
+    void testIfCustomerEntityValidationFailsThroughOnboarding() {
+        // GIVEN CustomerData with invalid data that will cause validation
+        // to fail inside the service
+        CustomerData invalidCustomerData = new CustomerData(
+                UUID.randomUUID(), null, null, null
+                , null, null, null, null,
+                null, null, null, null, null);
+
+        // WHEN service operation is called to onboard the customer with
+        DomainEntityException exception =
+                Assertions.assertThrows(DomainEntityException.class,
+                                        () -> customerService.onboard(invalidCustomerData));
+
+        // THEN domain object creation exception would be thrown
+        Assertions.assertFalse(exception.getMessage().isBlank());
+    }
+
+
+
+    /* ***************
+     * technical error Scenarios
+     * ***************
+     */
+
+
+    @Test
+    void testIfReadCustomerThrowsException_OnboardEceptionGoesThrough() {
+        // GIVEN the repository read customer throws an exception
+        Mockito.when(customerRepository.readByExternalIdentifier(externalIdentifier))
+                .thenReturn(CompletableFuture.failedFuture(
+                        new RuntimeException("customer ready error ")));
+
+        // WHEN service operation is called to onboard the customer with CustomerData
+        CompletableFuture<CustomerData> resultFuture =
+                customerService.onboard(sampleCustomerData);
+
+        // THEN the exception is going through
+        Assertions.assertThrows(RuntimeException.class, resultFuture::join);
+    }
+
+    @Test
+    void testIfWriteCustomerThrowsException_OnboardExceptionGoesThrough() {
+        // GIVEN the repository write throws an exception
+        Mockito.when(customerRepository.readByExternalIdentifier(externalIdentifier))
+                .thenReturn(CompletableFuture.completedFuture(Optional.empty()));
+
+        Mockito.when(customerRepository.write(sampleCustomerData))
+                .thenReturn(CompletableFuture.failedFuture(
+                        new RuntimeException("customer write error ")));
+
+        // WHEN service operation is called to onboard the customer with CustomerData
+        CompletableFuture<CustomerData> resultFuture =
+                customerService.onboard(sampleCustomerData);
+
+        // THEN the exception is going through the service
+        Assertions.assertThrows(RuntimeException.class, resultFuture::join);
     }
 }
