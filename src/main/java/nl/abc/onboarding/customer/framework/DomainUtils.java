@@ -1,4 +1,4 @@
-package nl.abc.onboarding.framework;
+package nl.abc.onboarding.customer.framework;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

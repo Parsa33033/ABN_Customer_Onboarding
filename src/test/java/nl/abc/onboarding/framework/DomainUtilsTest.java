@@ -1,5 +1,6 @@
 package nl.abc.onboarding.framework;
 
+import nl.abc.onboarding.customer.framework.DomainUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

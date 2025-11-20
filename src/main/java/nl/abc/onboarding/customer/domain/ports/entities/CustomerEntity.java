@@ -39,6 +39,11 @@ public class CustomerEntity implements DomainEntity<CustomerData> {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hashCode(this.identifier);
+    }
+
+    @Override
     public CustomerData toDataTransferObject() {
         return new CustomerData(
                 this.identifier,

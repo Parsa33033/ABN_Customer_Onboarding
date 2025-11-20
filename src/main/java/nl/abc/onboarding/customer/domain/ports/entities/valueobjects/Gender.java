@@ -1,6 +1,6 @@
 package nl.abc.onboarding.customer.domain.ports.entities.valueobjects;
 
-import nl.abc.onboarding.framework.ValueObject;
+import nl.abc.onboarding.customer.framework.ValueObject;
 
 public class Gender implements ValueObject<String> {
 
