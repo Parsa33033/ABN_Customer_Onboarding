@@ -15,11 +15,64 @@ public record CustomerData(
         String phoneNumber,
         String email,
         String nationality,
-        String residentialAddress,
+        AddressData residentialAddress,
         String socialSecurityNumber,
         String idDocumentPath,
-        String photoPath,
-        OnboardingStatus onboardingStatus,
-        String accountNumber
+        String photoPath
 ) implements DataTransferObject {
+
+    public CustomerData withPhotoPath(String photoPath) {
+        return new CustomerData(
+                this.identifier,
+                this.externalIdentifier,
+                this.firstName,
+                this.lastName,
+                this.gender,
+                this.dateOfBirth,
+                this.phoneNumber,
+                this.email,
+                this.nationality,
+                this.residentialAddress,
+                this.socialSecurityNumber,
+                this.idDocumentPath,
+                photoPath
+        );
+    }
+
+    public CustomerData withIdDocumentPath(String idDocumentPath) {
+        return new CustomerData(
+                this.identifier,
+                this.externalIdentifier,
+                this.firstName,
+                this.lastName,
+                this.gender,
+                this.dateOfBirth,
+                this.phoneNumber,
+                this.email,
+                this.nationality,
+                this.residentialAddress,
+                this.socialSecurityNumber,
+                idDocumentPath,
+                this.photoPath
+        );
+    }
+
+    public CustomerData withIdentifier(UUID identifier) {
+        return new CustomerData(
+                identifier,
+                this.externalIdentifier,
+                this.firstName,
+                this.lastName,
+                this.gender,
+                this.dateOfBirth,
+                this.phoneNumber,
+                this.email,
+                this.nationality,
+                this.residentialAddress,
+                this.socialSecurityNumber,
+                this.idDocumentPath,
+                this.photoPath
+        );
+    }
+
 }
