@@ -37,4 +37,14 @@ public class CustomerApplicationData {
         this.customerData.withIdDocumentPath(idDocumentPath);
         return this;
     }
+
+    public CustomerApplicationData setPhoto(MultipartFile photo) {
+        this.photo = photo;
+        return this;
+    }
+
+    public CustomerApplicationData setIdDocument(MultipartFile idDocument) {
+        this.idDocument = idDocument;
+        return this;
+    }
 }

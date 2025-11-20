@@ -27,6 +27,24 @@ public class CustomerApplication {
         this.fileStorage = fileStorage;
     }
 
+    /**
+     * Onboard a customer with photo and id document using these steps:
+     *
+     * 1. Map the request to application data structure and generate an
+     * internal identifier (UUID)
+     * 2. Store the photo and save the path in the application data
+     * 3. Store the id document and save the path in the application data
+     * 4. complete the CustomerData DTO with the photo and id document paths,
+     * and UUID identifier
+     * 4. Onboard the customer using the customer service
+     *
+     * @param request
+     * @param photo
+     * @param idDocument
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @PostMapping(value = "/onboarding", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CustomerResponse> onboard(
             @RequestPart("data") CustomerRequest request,
@@ -35,9 +53,9 @@ public class CustomerApplication {
     ) throws ExecutionException, InterruptedException {
 
        CustomerResponse customerResponse =
-         mapRequestAndGenerateInternalIdentifier(request)
-            .thenCompose(this::storePhoto)
-            .thenCompose(this::storeIdDocument)
+         mapRequestAndGenerateInternalIdentifier(request, photo, idDocument)
+            .thenCompose(this::storePhotoAndSaveThePath)
+            .thenCompose(this::storeIdDocumentAndSaveThePath)
             .thenCompose(i -> customerService.onboard(i.customerData))
             .thenApply(CustomerResponse::from).get();
 
@@ -45,18 +63,27 @@ public class CustomerApplication {
     }
 
     private static CompletableFuture<CustomerApplicationData> mapRequestAndGenerateInternalIdentifier(
-            CustomerRequest request) {
-        return CompletableFuture.completedFuture(
-                new CustomerApplicationData(request.toDataTransferObject()));
+            CustomerRequest request, MultipartFile photo, MultipartFile idDocument) {
+        CustomerApplicationData data =
+                new CustomerApplicationData(request.toDataTransferObject());
+        data.setPhoto(photo);
+        data.setIdDocument(idDocument);
+        return CompletableFuture.completedFuture(data);
     }
 
-    private CompletableFuture<CustomerApplicationData> storePhoto(CustomerApplicationData data) {
+    private CompletableFuture<CustomerApplicationData> storePhotoAndSaveThePath(CustomerApplicationData data) {
+        if (data.photo == null) {
+            return CompletableFuture.completedFuture(data);
+        }
         return fileStorage.persist(data.photo, data.externalIdentifier,
                              FileType.PHOTO)
                 .thenApply(data::setPhotoPath);
     }
 
-    private CompletableFuture<CustomerApplicationData> storeIdDocument(CustomerApplicationData data) {
+    private CompletableFuture<CustomerApplicationData> storeIdDocumentAndSaveThePath(CustomerApplicationData data) {
+        if (data.idDocument == null) {
+            return CompletableFuture.completedFuture(data);
+        }
         return fileStorage.persist(data.idDocument, data.externalIdentifier,
                                    FileType.ID)
                 .thenApply(data::setIdDocumentPath);
