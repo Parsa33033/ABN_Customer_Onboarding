@@ -16,7 +16,6 @@ public class Email implements ValueObject<String> {
 
     @Override
     public void validate(String value) {
-        // TODO: implement email validation logic
         Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
         if (!emailPattern.matcher(value).matches()) {
             throw new EmailNotValidException(value);
