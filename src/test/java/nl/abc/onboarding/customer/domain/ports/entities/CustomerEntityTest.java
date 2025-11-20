@@ -31,32 +31,22 @@ public class CustomerEntityTest {
     public void init() {
         identifier = UUID.randomUUID();
         externalIdentifier = "EXT-" + UUID.randomUUID();
-        addressData = new AddressData("Main Street 1", "1234 AB",
-                                      "Amsterdam", "Netherlands");
+        addressData = new AddressData(
+                "Main Street 1", "1234 AB", "Amsterdam",
+                                      "Netherlands");
     }
 
     @Test
     void fromDataTransferObjectToDataTransferObject() {
 
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
 
 
-        CustomerEntity customer =
-                CustomerEntity.build().fromDataTransferObject(expected);
+        CustomerEntity customer = CustomerEntity.build()
+                .fromDataTransferObject(expected);
 
         CustomerData actual = customer.toDataTransferObject();
         Assertions.assertEquals(expected, actual);
@@ -65,75 +55,50 @@ public class CustomerEntityTest {
     @Test
     void testInvalidEmailThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                "invalid email",
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        EmailNotValidException exception =
-                Assertions.assertThrows(EmailNotValidException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, "invalid email", NATIONALITY,
+                addressData, SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH,
+                PHOTO_PATH);
+        EmailNotValidException exception = Assertions.assertThrows(
+                EmailNotValidException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("The email 'invalid email' is not valid.", exception.getMessage());
+        Assertions.assertEquals(
+                "The email 'invalid email' is not valid.",
+                exception.getMessage());
 
     }
 
     @Test
     void testInvalidPhoneNumberThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                "invalid phone number",
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        PhoneNumberNotValidException exception =
-                Assertions.assertThrows(PhoneNumberNotValidException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, "invalid phone number", EMAIL, NATIONALITY,
+                addressData, SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH,
+                PHOTO_PATH);
+        PhoneNumberNotValidException exception = Assertions.assertThrows(
+                PhoneNumberNotValidException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("The phoneNumber 'invalid phone number' is not valid.", exception.getMessage());
+        Assertions.assertEquals(
+                "The phoneNumber 'invalid phone number' is not valid.",
+                exception.getMessage());
 
     }
 
     @Test
     void testInvalidGenderThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                "invalid",
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        IllegalArgumentException exception =
-                Assertions.assertThrows(IllegalArgumentException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME,
+                "invalid", DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY,
+                addressData, SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH,
+                PHOTO_PATH);
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Unknown gender: invalid", exception.getMessage());
+        Assertions.assertEquals(
+                "Unknown gender: invalid", exception.getMessage());
 
     }
 
@@ -141,25 +106,17 @@ public class CustomerEntityTest {
     void testInvalidAddressThrowsException() {
 
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                null,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        NullPointerException exception =
-                Assertions.assertThrows(NullPointerException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, null,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("residentialAddress cannot be null", exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " residentialAddress. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
 
     }
 
@@ -167,26 +124,17 @@ public class CustomerEntityTest {
     void testInvalidIdentifierThrowsException() {
 
         CustomerData expected = new CustomerData(
-                null,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        NullPointerException exception =
-                Assertions.assertThrows(NullPointerException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                null, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("identifier cannot be null",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " identifier. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
 
     }
 
@@ -195,224 +143,144 @@ public class CustomerEntityTest {
     @Test
     void testInvalidExternalIdentifierThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                null,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, null, FIRST_NAME, LAST_NAME, GENDER, DATE_OF_BIRTH,
+                PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: externalIdentifier. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " externalIdentifier. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidFirstNameThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                null,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, null, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: firstName. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " firstName. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidLastNameThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                null,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, null, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: lastName. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute: " +
+                        "lastName. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testNullGenderThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                null,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, null,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: gender. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute: " +
+                        "gender. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidDateOfBirthThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                null,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        NullPointerException exception =
-                Assertions.assertThrows(NullPointerException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                null, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("dateOfBirth cannot be null", exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " dateOfBirth. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidNationalityThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                null,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, null, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: nationality. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute: " +
+                        "nationality. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidSocialSecurityNumberThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                null,
-                ID_DOCUMENT_PATH,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                null, ID_DOCUMENT_PATH, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: socialSecurityNumber. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " socialSecurityNumber. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidIdDocumentPathThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                null,
-                PHOTO_PATH
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, null, PHOTO_PATH);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: idDocumentPath. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " idDocumentPath. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 
     @Test
     void testInvalidPhotoPathThrowsException() {
         CustomerData expected = new CustomerData(
-                identifier,
-                externalIdentifier,
-                FIRST_NAME,
-                LAST_NAME,
-                GENDER,
-                DATE_OF_BIRTH,
-                PHONE_NUMBER,
-                EMAIL,
-                NATIONALITY,
-                addressData,
-                SOCIAL_SECURITY_NUMBER,
-                ID_DOCUMENT_PATH,
-                null
-        );
-        DomainEntityException exception =
-                Assertions.assertThrows(DomainEntityException.class,
-                                        () -> CustomerEntity.build().fromDataTransferObject(expected));
+                identifier, externalIdentifier, FIRST_NAME, LAST_NAME, GENDER,
+                DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
+                SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, null);
+        DomainEntityException exception = Assertions.assertThrows(
+                DomainEntityException.class,
+                () -> CustomerEntity.build().fromDataTransferObject(expected));
 
-        Assertions.assertEquals("Domain Entity CustomerEntity failed to build on attribute: photoPath. Invalid value provided. value should not be null or empty.",
-                                exception.getMessage());
+        Assertions.assertEquals(
+                "Domain Entity CustomerEntity failed to build on attribute:" +
+                        " photoPath. Invalid value provided. value should not be null or empty.",
+                exception.getMessage());
     }
 }

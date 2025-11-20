@@ -114,38 +114,38 @@ public class CustomerEntity implements DomainEntity<CustomerData> {
         private String photoPath;
 
         public Builder identifier(UUID identifier) {
-            Objects.requireNonNull(identifier, "identifier cannot be null");
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "identifier", identifier);
             this.identifier = identifier;
             return this;
         }
 
         public Builder externalIdentifier(String externalIdentifier) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class,
-                                             "externalIdentifier", externalIdentifier);
+            ExceptionUtil.throwIfNull(CustomerEntity.class,
+                                      "externalIdentifier", externalIdentifier);
             this.externalIdentifier = externalIdentifier;
             return this;
         }
 
         public Builder firstName(String firstName) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "firstName", firstName);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "firstName", firstName);
             this.firstName = firstName;
             return this;
         }
 
         public Builder lastName(String lastName) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "lastName", lastName);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "lastName", lastName);
             this.lastName = lastName;
             return this;
         }
 
         public Builder gender(String gender) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "gender", gender);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "gender", gender);
             this.gender = new Gender(gender);
             return this;
         }
 
         public Builder dateOfBirth(LocalDate dateOfBirth) {
-            Objects.requireNonNull(dateOfBirth, "dateOfBirth cannot be null");
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "dateOfBirth", dateOfBirth);
             this.dateOfBirth = dateOfBirth;
             return this;
         }
@@ -161,32 +161,32 @@ public class CustomerEntity implements DomainEntity<CustomerData> {
         }
 
         public Builder nationality(String nationality) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "nationality", nationality);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "nationality", nationality);
             this.nationality = nationality;
             return this;
         }
 
         public Builder residentialAddress(AddressData addressData) {
-            Objects.requireNonNull(addressData, "residentialAddress cannot be null");
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "residentialAddress", addressData);
             this.residentialAddress =
                     AddressEntity.build().fromDataTransferObject(addressData);
             return this;
         }
 
         public Builder socialSecurityNumber(String socialSecurityNumber) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "socialSecurityNumber", socialSecurityNumber);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "socialSecurityNumber", socialSecurityNumber);
             this.socialSecurityNumber = socialSecurityNumber;
             return this;
         }
 
         public Builder idDocumentPath(String idDocumentPath) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "idDocumentPath", idDocumentPath);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "idDocumentPath", idDocumentPath);
             this.idDocumentPath = idDocumentPath;
             return this;
         }
 
         public Builder photoPath(String photoPath) {
-            ExceptionUtil.throwIfNullOrEmpty(CustomerEntity.class, "photoPath", photoPath);
+            ExceptionUtil.throwIfNull(CustomerEntity.class, "photoPath", photoPath);
             this.photoPath = photoPath;
             return this;
         }

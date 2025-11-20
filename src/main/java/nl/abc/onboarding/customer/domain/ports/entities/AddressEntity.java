@@ -56,25 +56,25 @@ public class AddressEntity implements DomainEntity<AddressData> {
         private String country;
 
         public Builder address(String address) {
-            ExceptionUtil.throwIfNullOrEmpty(AddressEntity.class, "address", address);
+            ExceptionUtil.throwIfNull(AddressEntity.class, "address", address);
             this.address = address;
             return this;
         }
 
         public Builder zipCode(String zipCode) {
-            ExceptionUtil.throwIfNullOrEmpty(AddressEntity.class, "zipCode", zipCode);
+            ExceptionUtil.throwIfNull(AddressEntity.class, "zipCode", zipCode);
             this.zipCode = zipCode;
             return this;
         }
 
         public Builder city(String city) {
-            ExceptionUtil.throwIfNullOrEmpty(AddressEntity.class, "city", city);
+            ExceptionUtil.throwIfNull(AddressEntity.class, "city", city);
             this.city = city;
             return this;
         }
 
         public Builder country(String country) {
-            ExceptionUtil.throwIfNullOrEmpty(AddressEntity.class, "country", country);
+            ExceptionUtil.throwIfNull(AddressEntity.class, "country", country);
             this.country = country;
             return this;
         }
