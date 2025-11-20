@@ -2,15 +2,16 @@ package nl.abc.onboarding.customer.domain.ports.outgoing;
 
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface CustomerRepository {
 
     /**
      * read customer data by external identifier from the database
-     * @return the customer data as a CompletableFuture
+     * @return an Optional customer data as a CompletableFuture. if not found, the Optional is empty
      */
-    CompletableFuture<CustomerData> readByExternalIdentifier(String externalIdentifier);
+    CompletableFuture<Optional<CustomerData>> readByExternalIdentifier(String externalIdentifier);
 
     /**
      * write customer data to the database
