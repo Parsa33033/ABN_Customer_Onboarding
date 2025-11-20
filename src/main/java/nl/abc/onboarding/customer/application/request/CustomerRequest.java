@@ -1,4 +1,4 @@
-package nl.abc.onboarding.customer.application.response;
+package nl.abc.onboarding.customer.application.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
@@ -8,7 +8,6 @@ import nl.abc.onboarding.customer.domain.ports.dtos.AddressData;
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

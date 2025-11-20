@@ -1,0 +1,18 @@
+{
+  "externalIdentifier": "ext-123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "gender": "Male",
+  "dateOfBirth": "1990-01-01",
+  "phoneNumber": "0612345678",
+  "email": "john.doe@example.com",
+  "nationality": "NL",
+  "residentialAddress": {
+    "address": "Main Street 1",
+    "zipCode": "1234AB",
+    "city": "Amsterdam",
+    "country": "NL"
+  },
+  "socialSecurityNumber": "123-45-6789"
+}
+

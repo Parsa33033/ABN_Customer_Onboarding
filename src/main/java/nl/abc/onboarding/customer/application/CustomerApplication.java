@@ -1,6 +1,6 @@
 package nl.abc.onboarding.customer.application;
 
-import nl.abc.onboarding.customer.application.response.CustomerRequest;
+import nl.abc.onboarding.customer.application.request.CustomerRequest;
 import nl.abc.onboarding.customer.application.response.CustomerResponse;
 import nl.abc.onboarding.customer.domain.ports.incoming.CustomerService;
 import nl.abc.onboarding.customer.infrastructure.filestorage.FileStorage;

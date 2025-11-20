@@ -23,18 +23,19 @@ public class CustomerApplicationData {
     public CustomerApplicationData(CustomerData customerData) {
         this.customerData = customerData;
         this.externalIdentifier = customerData.externalIdentifier();
-        this.customerData.withIdentifier(UUID.randomUUID());
+        this.customerData = this.customerData.withIdentifier(UUID.randomUUID());
     }
 
     public CustomerApplicationData setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
-        this.customerData.withPhotoPath(photoPath);
+        this.customerData = this.customerData.withPhotoPath(photoPath);
         return this;
     }
 
     public CustomerApplicationData setIdDocumentPath(String idDocumentPath) {
         this.idDocumentPath = idDocumentPath;
-        this.customerData.withIdDocumentPath(idDocumentPath);
+        this.customerData =
+                this.customerData.withIdDocumentPath(idDocumentPath);
         return this;
     }
 
