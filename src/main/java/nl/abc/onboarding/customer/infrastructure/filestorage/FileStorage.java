@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -24,11 +23,14 @@ public class FileStorage {
     }
 
     /**
-     * Persist an image MultipartFile as PNG using the provided UUID as filename.
+     * Persist an image MultipartFile as PNG using the provided
+     * externalIdentifier
+     * as filename.
      * Validates the file is an image and converts it to PNG.
      * Returns a CompletableFuture that completes with the full absolute file path (including UUID + .png).
      */
-    public CompletableFuture<String> persist(MultipartFile file, UUID uuid, FileType fileType) {
+    public CompletableFuture<String> persist(MultipartFile file, String externalIdentifier,
+                                             FileType fileType) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 if (file == null || file.isEmpty()) {
@@ -52,7 +54,7 @@ public class FileStorage {
                 Path targetDir = chooseBase(fileType);
                 Files.createDirectories(targetDir);
 
-                Path targetFile = targetDir.resolve(uuid.toString() + ".png");
+                Path targetFile = targetDir.resolve(externalIdentifier + ".png");
 
                 // convert/write as PNG
                 boolean written = ImageIO.write(image, "png", targetFile.toFile());
@@ -94,7 +96,7 @@ public class FileStorage {
     private Path chooseBase(FileType fileType) {
         return switch (fileType) {
             case ID -> idBase;
-            case PIC -> picBase;
+            case PHOTO -> picBase;
             default -> throw new IllegalArgumentException("Unsupported file type: " + fileType);
         };
     }

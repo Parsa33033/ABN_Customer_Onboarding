@@ -79,8 +79,7 @@ public class Customer {
         this.photoPath = photoPath;
     }
 
-    // Mapper: construct entity from domain DTO
-    public static Customer from(CustomerData data) {
+    public static Customer fromDataTransferObject(CustomerData data) {
         if (data == null) return null;
 
         Address residential = null;

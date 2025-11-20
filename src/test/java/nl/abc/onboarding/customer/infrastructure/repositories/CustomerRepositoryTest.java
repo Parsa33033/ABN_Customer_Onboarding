@@ -57,7 +57,7 @@ class CustomerRepositoryTest {
                 DATE_OF_BIRTH, PHONE_NUMBER, EMAIL, NATIONALITY, addressData,
                 SOCIAL_SECURITY_NUMBER, ID_DOCUMENT_PATH, PHOTO_PATH);
 
-        Customer customer = Customer.from(expectedCustomerToPersist);
+        Customer customer = Customer.fromDataTransferObject(expectedCustomerToPersist);
 
         Customer saved = repository.save(customer);
         assertNotNull(saved);

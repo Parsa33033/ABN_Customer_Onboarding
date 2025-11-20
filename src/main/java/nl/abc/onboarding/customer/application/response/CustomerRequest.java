@@ -16,8 +16,6 @@ import java.util.UUID;
 @Builder
 public class CustomerRequest {
 
-    private UUID identifier;
-
     @Size(max = 120)
     private String externalIdentifier;
 
@@ -65,7 +63,7 @@ public class CustomerRequest {
         }
 
         return new CustomerData(
-                this.identifier,
+                null,
                 this.externalIdentifier,
                 this.firstName,
                 this.lastName,

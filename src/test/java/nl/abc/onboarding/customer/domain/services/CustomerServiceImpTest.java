@@ -99,8 +99,8 @@ public class CustomerServiceImpTest {
         CompletableFuture<CustomerData> resultFuture =
                 customerService.onboard(sampleCustomerData);
 
-        // THEN returned result is the already existing customer data
-        resultFuture.thenAccept(CustomerServiceImpTest::assertActualCustomerData).join();
+        // THEN returned result is the newly created customer data
+        resultFuture.thenAccept(actual ->  Assertions.assertEquals(sampleCustomerData, actual)).join();
 
     }
 
@@ -125,34 +125,12 @@ public class CustomerServiceImpTest {
                 argumentCaptorForWriteCustomerData.getValue();
 
         // THEN returned result is the newly created customer data
-        resultFuture.thenAccept(CustomerServiceImpTest::assertActualCustomerData).join();
+        resultFuture.thenAccept(actual ->  Assertions.assertEquals(sampleCustomerData, actual)).join();
 
         // AND the actual persisted customer data is as expected
-        assertActualCustomerData(actualPersistedCustomer);
+        Assertions.assertEquals(sampleCustomerData, actualPersistedCustomer);
 
     }
-
-    public static void assertActualCustomerData(CustomerData actual) {
-        // identifier UUID is not going to be tested here because it is created
-        // inside the service during onboarding when customer does not exist
-        CustomerData expected = sampleCustomerData;
-
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(expected.firstName(), actual.firstName()),
-                () -> Assertions.assertEquals(expected.lastName(), actual.lastName()),
-                () -> Assertions.assertEquals(expected.gender(), actual.gender()),
-                () -> Assertions.assertEquals(expected.dateOfBirth(), actual.dateOfBirth()),
-                () -> Assertions.assertEquals(expected.phoneNumber(), actual.phoneNumber()),
-                () -> Assertions.assertEquals(expected.email(), actual.email()),
-                () -> Assertions.assertEquals(expected.nationality(), actual.nationality()),
-                () -> Assertions.assertEquals(expected.residentialAddress(), actual.residentialAddress()),
-                () -> Assertions.assertEquals(expected.socialSecurityNumber(), actual.socialSecurityNumber()),
-                () -> Assertions.assertEquals(expected.idDocumentPath(), actual.idDocumentPath()),
-                () -> Assertions.assertEquals(expected.photoPath(), actual.photoPath())
-        );
-
-    }
-
 
     /* ***************
      * functional error Scenarios

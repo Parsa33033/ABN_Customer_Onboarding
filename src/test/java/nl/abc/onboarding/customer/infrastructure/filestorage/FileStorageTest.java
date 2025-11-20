@@ -46,14 +46,14 @@ public class FileStorageTest {
             imageBytes
         );
 
-        UUID uuid = UUID.randomUUID();
-        String returnedPath = storage.persist(multipart, uuid, FileType.PIC).join();
+        String externalIdentifier = "user-123";
+        String returnedPath = storage.persist(multipart, externalIdentifier, FileType.PHOTO).join();
         assertNotNull(returnedPath);
         Path stored = Path.of(returnedPath);
         assertTrue(Files.exists(stored), "Stored image should exist");
         // compare absolute path strings to avoid Path equality quirks across platforms
         assertEquals(
-            tempDir.resolve("pic").resolve(uuid.toString() + ".png").toAbsolutePath().toString(),
+            tempDir.resolve("pic").resolve(externalIdentifier + ".png").toAbsolutePath().toString(),
             stored.toAbsolutePath().toString()
         );
 
@@ -76,8 +76,10 @@ public class FileStorageTest {
             "this is not an image".getBytes()
         );
 
-        UUID uuid = UUID.randomUUID();
-        CompletionException ex = assertThrows(CompletionException.class, () -> storage.persist(multipart, uuid, FileType.ID).join());
+        String externalIdentifier = "user-123";
+        CompletionException ex = assertThrows(CompletionException.class,
+                                              () -> storage.persist(multipart
+                                                      , externalIdentifier, FileType.ID).join());
         assertTrue(ex.getCause() instanceof IllegalArgumentException);
     }
 

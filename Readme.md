@@ -15,7 +15,8 @@ go to http://localhost:8080/h2-console
 
 this project used gpt to help with:
 
-- autocompletion of lines (mostly comments and strings)
+- autocompletion of lines (mostly comments, javadocs, attribute names, and 
+  strings)
 - attribute generation for classed (dto, entity, getters/setters)
 - setting up application properties
 - generation of this very readme file
