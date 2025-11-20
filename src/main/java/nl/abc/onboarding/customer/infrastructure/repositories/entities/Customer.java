@@ -13,7 +13,9 @@ import nl.abc.onboarding.customer.domain.ports.dtos.AddressData;
 @Getter
 @Setter
 @Entity
-@Table(name = "customer", uniqueConstraints = @UniqueConstraint(name = "uk_customer_external_identifier", columnNames = "external_identifier"))
+@Table(name = "customer", uniqueConstraints = @UniqueConstraint(
+        name = "customer_external_identifier",
+        columnNames = "external_identifier"))
 public class Customer {
 
     @Id
@@ -45,7 +47,8 @@ public class Customer {
     private String nationality;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "residential_address_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "residential_address_id", referencedColumnName = "id",
+                unique = true)
     private Address residentialAddress;
 
     @Column(name = "social_security_number")
@@ -60,7 +63,12 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(UUID identifier, String externalIdentifier, String firstName, String lastName, String gender, LocalDate dateOfBirth, String phoneNumber, String email, String nationality, Address residentialAddress, String socialSecurityNumber, String idDocumentPath, String photoPath) {
+    public Customer(UUID identifier, String externalIdentifier,
+                    String firstName, String lastName, String gender,
+                    LocalDate dateOfBirth, String phoneNumber, String email,
+                    String nationality, Address residentialAddress,
+                    String socialSecurityNumber, String idDocumentPath,
+                    String photoPath) {
         this.identifier = identifier;
         this.externalIdentifier = externalIdentifier;
         this.firstName = firstName;

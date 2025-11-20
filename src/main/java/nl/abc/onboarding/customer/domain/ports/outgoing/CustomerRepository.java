@@ -10,7 +10,7 @@ public interface CustomerRepository {
      * read customer data by external identifier from the database
      * @return the customer data as a CompletableFuture
      */
-    CompletableFuture<CustomerData> readByExternalIdentifier();
+    CompletableFuture<CustomerData> readByExternalIdentifier(String externalIdentifier);
 
     /**
      * write customer data to the database

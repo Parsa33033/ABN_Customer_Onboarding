@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
-    public CompletableFuture<CustomerData> readByExternalIdentifier() {
+    public CompletableFuture<CustomerData> readByExternalIdentifier(String externalIdentifier) {
         throw new NotImplementedException();
     }
 

@@ -4,6 +4,7 @@ import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 import nl.abc.onboarding.customer.domain.ports.entities.CustomerEntity;
 import nl.abc.onboarding.customer.domain.ports.incoming.CustomerService;
 import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerRepository;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -17,11 +18,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CompletableFuture<CustomerData> onboard(CustomerData customerData) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public CompletableFuture<CustomerServiceData> validate(CustomerData customerData) {
-        return null;
+        throw new NotImplementedException();
     }
 
 }
