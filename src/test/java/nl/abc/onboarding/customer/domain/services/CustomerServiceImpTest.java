@@ -4,7 +4,7 @@ import nl.abc.onboarding.customer.domain.ports.dtos.AddressData;
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 import nl.abc.onboarding.customer.domain.ports.entities.exceptions.DomainEntityException;
 import nl.abc.onboarding.customer.domain.ports.incoming.CustomerService;
-import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerRepository;
+import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerInteractionRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ public class CustomerServiceImpTest {
     public static final java.util.UUID identifier = java.util.UUID.randomUUID();
 
     @Mock
-    CustomerRepository customerRepository;
+    CustomerInteractionRepository customerInteractionRepository;
 
     ArgumentCaptor<CustomerData> argumentCaptorForWriteCustomerData;
 
@@ -51,8 +51,8 @@ public class CustomerServiceImpTest {
 
     @BeforeEach
     void init() {
-        customerRepository =
-                Mockito.mock(CustomerRepository.class);
+        customerInteractionRepository =
+                Mockito.mock(CustomerInteractionRepository.class);
         argumentCaptorForWriteCustomerData =
                 ArgumentCaptor.forClass(CustomerData.class);
         sampleAddressData = new AddressData(
@@ -77,7 +77,7 @@ public class CustomerServiceImpTest {
                 PHOTO_PATH
         );
         customerService =
-                new CustomerServiceImpl(customerRepository);
+                new CustomerServiceImpl(customerInteractionRepository);
     }
 
 
@@ -91,7 +91,8 @@ public class CustomerServiceImpTest {
     @Test
     public void testOnboardSuccessful_ReturnedAnAlreadyFoundCustomer() {
         // GIVEN a customer already exists with the external identifier
-        Mockito.when(customerRepository.readByExternalIdentifier(externalIdentifier))
+        Mockito.when(
+                        customerInteractionRepository.readByExternalIdentifier(externalIdentifier))
                 .thenReturn(CompletableFuture.completedFuture(Optional.of(sampleCustomerData)));
 
         // WHEN service operation is called to onboard the customer with
@@ -107,10 +108,11 @@ public class CustomerServiceImpTest {
     @Test
     public void testOnboardSuccess_CustomerDoesNotAlreadyExistAndWillBeCreated() {
         // GIVEN Customer does not exist with the external identifier
-        Mockito.when(customerRepository.readByExternalIdentifier(externalIdentifier))
+        Mockito.when(
+                        customerInteractionRepository.readByExternalIdentifier(externalIdentifier))
                 .thenReturn(CompletableFuture.completedFuture(Optional.empty()));
 
-        Mockito.when(customerRepository.write(sampleCustomerData))
+        Mockito.when(customerInteractionRepository.write(sampleCustomerData))
                 .thenReturn(CompletableFuture.completedFuture(sampleCustomerData));
 
 
@@ -120,7 +122,8 @@ public class CustomerServiceImpTest {
         // data being persisted that can be asserted later
         CompletableFuture<CustomerData> resultFuture =
                 customerService.onboard(sampleCustomerData);
-        Mockito.verify(customerRepository).write(argumentCaptorForWriteCustomerData.capture());
+        Mockito.verify(
+                customerInteractionRepository).write(argumentCaptorForWriteCustomerData.capture());
         CustomerData actualPersistedCustomer =
                 argumentCaptorForWriteCustomerData.getValue();
 
@@ -166,7 +169,8 @@ public class CustomerServiceImpTest {
     @Test
     void testIfReadCustomerThrowsException_OnboardEceptionGoesThrough() {
         // GIVEN the repository read customer throws an exception
-        Mockito.when(customerRepository.readByExternalIdentifier(externalIdentifier))
+        Mockito.when(
+                        customerInteractionRepository.readByExternalIdentifier(externalIdentifier))
                 .thenReturn(CompletableFuture.failedFuture(
                         new RuntimeException("customer ready error ")));
 
@@ -181,10 +185,11 @@ public class CustomerServiceImpTest {
     @Test
     void testIfWriteCustomerThrowsException_OnboardExceptionGoesThrough() {
         // GIVEN the repository write throws an exception
-        Mockito.when(customerRepository.readByExternalIdentifier(externalIdentifier))
+        Mockito.when(
+                        customerInteractionRepository.readByExternalIdentifier(externalIdentifier))
                 .thenReturn(CompletableFuture.completedFuture(Optional.empty()));
 
-        Mockito.when(customerRepository.write(sampleCustomerData))
+        Mockito.when(customerInteractionRepository.write(sampleCustomerData))
                 .thenReturn(CompletableFuture.failedFuture(
                         new RuntimeException("customer write error ")));
 

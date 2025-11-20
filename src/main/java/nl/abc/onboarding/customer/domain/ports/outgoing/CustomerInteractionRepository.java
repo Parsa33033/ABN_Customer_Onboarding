@@ -5,7 +5,7 @@ import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public interface CustomerRepository {
+public interface CustomerInteractionRepository {
 
     /**
      * read customer data by external identifier from the database

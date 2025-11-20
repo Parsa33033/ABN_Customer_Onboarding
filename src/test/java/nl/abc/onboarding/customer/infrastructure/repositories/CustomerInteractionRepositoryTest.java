@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class CustomerRepositoryTest {
+class CustomerInteractionRepositoryTest {
 
     public static final String FIRST_NAME = "John";
     public static final String LAST_NAME = "Doe";

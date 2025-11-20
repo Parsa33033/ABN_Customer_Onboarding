@@ -1,18 +1,21 @@
 package nl.abc.onboarding.customer.infrastructure.repositories;
 
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
-import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerRepository;
+import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerInteractionRepository;
 import nl.abc.onboarding.customer.infrastructure.repositories.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class CustomerRepositoryImpl implements CustomerRepository {
+public class CustomerInteractionRepositoryImpl implements CustomerInteractionRepository {
 
-    @Autowired
-    private nl.abc.onboarding.customer.infrastructure.repositories.CustomerRepository
-            customerJpaRepository;
+    private CustomerRepository customerJpaRepository;
+
+    public CustomerInteractionRepositoryImpl(CustomerRepository customerJpaRepository) {
+        this.customerJpaRepository = customerJpaRepository;
+    }
 
     /**
      * read customer data by external identifier from the database

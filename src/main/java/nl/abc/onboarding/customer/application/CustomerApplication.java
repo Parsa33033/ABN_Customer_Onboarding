@@ -62,6 +62,14 @@ public class CustomerApplication {
         return ResponseEntity.ok(customerResponse);
     }
 
+    /**
+     * Map the request to application data structure and generate an internal
+     * identifier (UUID) for file storage purposes.
+     * @param request
+     * @param photo
+     * @param idDocument
+     * @return
+     */
     private static CompletableFuture<CustomerApplicationData> mapRequestAndGenerateInternalIdentifier(
             CustomerRequest request, MultipartFile photo, MultipartFile idDocument) {
         CustomerApplicationData data =
@@ -71,7 +79,13 @@ public class CustomerApplication {
         return CompletableFuture.completedFuture(data);
     }
 
-    private CompletableFuture<CustomerApplicationData> storePhotoAndSaveThePath(CustomerApplicationData data) {
+    /**
+     * Store the photo and save the path in the application data
+     * @param data
+     * @return
+     */
+    private CompletableFuture<CustomerApplicationData> storePhotoAndSaveThePath(
+            CustomerApplicationData data) {
         if (data.photo == null) {
             return CompletableFuture.completedFuture(data);
         }
@@ -80,7 +94,14 @@ public class CustomerApplication {
                 .thenApply(data::setPhotoPath);
     }
 
-    private CompletableFuture<CustomerApplicationData> storeIdDocumentAndSaveThePath(CustomerApplicationData data) {
+
+    /**
+     * Store the id document and save the path in the application data
+     * @param data
+     * @return
+     */
+    private CompletableFuture<CustomerApplicationData> storeIdDocumentAndSaveThePath(
+            CustomerApplicationData data) {
         if (data.idDocument == null) {
             return CompletableFuture.completedFuture(data);
         }

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 import nl.abc.onboarding.customer.domain.ports.entities.CustomerEntity;
 import nl.abc.onboarding.customer.domain.ports.incoming.CustomerService;
-import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerRepository;
+import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerInteractionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +15,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     private static final Logger log = LoggerFactory.getLogger(
             CustomerServiceImpl.class);
-    private CustomerRepository customerRepository;
+    private CustomerInteractionRepository customerInteractionRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    public CustomerServiceImpl(
+            CustomerInteractionRepository customerInteractionRepository) {
+        this.customerInteractionRepository = customerInteractionRepository;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
             CustomerServiceData data) {
         String externalIdentifier =
                 data.customerEntity.toDataTransferObject().externalIdentifier();
-        return customerRepository.readByExternalIdentifier(externalIdentifier)
+        return customerInteractionRepository.readByExternalIdentifier(externalIdentifier)
                 .thenApply(optionalCustomer -> {
                     if (optionalCustomer.isPresent()) {
                         return data.setReadCustomerResult(
@@ -62,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
                     data.readCustomerResult.externalIdentifier());
             return CompletableFuture.completedFuture(data);
         }
-        return customerRepository.write(
+        return customerInteractionRepository.write(
                         data.customerEntity.toDataTransferObject())
                 .thenApply(data::setWriteCustomerResult);
     }
