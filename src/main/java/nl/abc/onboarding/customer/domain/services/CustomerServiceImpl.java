@@ -1,14 +1,20 @@
 package nl.abc.onboarding.customer.domain.services;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 import nl.abc.onboarding.customer.domain.ports.entities.CustomerEntity;
 import nl.abc.onboarding.customer.domain.ports.incoming.CustomerService;
 import nl.abc.onboarding.customer.domain.ports.outgoing.CustomerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
+    private static final Logger log = LoggerFactory.getLogger(
+            CustomerServiceImpl.class);
     private CustomerRepository customerRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
@@ -49,6 +55,11 @@ public class CustomerServiceImpl implements CustomerService {
     public CompletableFuture<CustomerServiceData> tryToCreateCustomerIfDoesNotAlreadyExist(
             CustomerServiceData data) {
         if (data.readCustomerResult != null) {
+            // tracing the behaviour of the onboarding to make sure we don't create duplicates
+            // also good for debugging purposes
+            log.info(
+                    "Customer with external identifier {} already exists. Skipping creation.",
+                    data.readCustomerResult.externalIdentifier());
             return CompletableFuture.completedFuture(data);
         }
         return customerRepository.write(
