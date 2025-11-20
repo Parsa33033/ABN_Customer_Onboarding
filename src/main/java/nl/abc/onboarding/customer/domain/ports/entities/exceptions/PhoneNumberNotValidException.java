@@ -1,4 +1,4 @@
-package nl.abc.onboarding.customer.domain.ports.exceptions;
+package nl.abc.onboarding.customer.domain.ports.entities.exceptions;
 
 public class PhoneNumberNotValidException extends DomainEntityException {
 

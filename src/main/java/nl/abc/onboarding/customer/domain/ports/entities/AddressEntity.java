@@ -1,10 +1,8 @@
 package nl.abc.onboarding.customer.domain.ports.entities;
 
 import nl.abc.onboarding.customer.domain.ports.dtos.AddressData;
-import nl.abc.onboarding.customer.domain.ports.exceptions.ExceptionUtil;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.ExceptionUtil;
 import nl.abc.onboarding.customer.framework.DomainEntity;
-
-import java.util.Objects;
 
 public class AddressEntity implements DomainEntity<AddressData> {
 

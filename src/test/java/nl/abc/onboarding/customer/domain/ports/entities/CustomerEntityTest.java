@@ -2,9 +2,9 @@ package nl.abc.onboarding.customer.domain.ports.entities;
 
 import nl.abc.onboarding.customer.domain.ports.dtos.AddressData;
 import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
-import nl.abc.onboarding.customer.domain.ports.exceptions.DomainEntityException;
-import nl.abc.onboarding.customer.domain.ports.exceptions.EmailNotValidException;
-import nl.abc.onboarding.customer.domain.ports.exceptions.PhoneNumberNotValidException;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.DomainEntityException;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.EmailNotValidException;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.PhoneNumberNotValidException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

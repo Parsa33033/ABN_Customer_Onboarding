@@ -1,6 +1,6 @@
 package nl.abc.onboarding.customer.domain.ports.entities.valueobjects;
 
-import nl.abc.onboarding.customer.domain.ports.exceptions.PhoneNumberNotValidException;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.PhoneNumberNotValidException;
 import nl.abc.onboarding.framework.ValueObject;
 
 import java.util.regex.Pattern;

@@ -5,7 +5,7 @@ import nl.abc.onboarding.customer.domain.ports.dtos.CustomerData;
 import nl.abc.onboarding.customer.domain.ports.entities.valueobjects.Email;
 import nl.abc.onboarding.customer.domain.ports.entities.valueobjects.Gender;
 import nl.abc.onboarding.customer.domain.ports.entities.valueobjects.PhoneNumber;
-import nl.abc.onboarding.customer.domain.ports.exceptions.ExceptionUtil;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.ExceptionUtil;
 import nl.abc.onboarding.customer.framework.DomainEntity;
 
 import java.time.LocalDate;

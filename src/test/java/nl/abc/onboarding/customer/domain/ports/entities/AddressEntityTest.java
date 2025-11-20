@@ -1,6 +1,6 @@
 package nl.abc.onboarding.customer.domain.ports.entities;
 
-import nl.abc.onboarding.customer.domain.ports.exceptions.DomainEntityException;
+import nl.abc.onboarding.customer.domain.ports.entities.exceptions.DomainEntityException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
