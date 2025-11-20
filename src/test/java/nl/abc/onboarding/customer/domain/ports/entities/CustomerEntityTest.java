@@ -138,8 +138,6 @@ public class CustomerEntityTest {
 
     }
 
-    // ...additional tests for other fields can be added similarly
-
     @Test
     void testInvalidExternalIdentifierThrowsException() {
         CustomerData expected = new CustomerData(
