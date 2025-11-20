@@ -13,16 +13,14 @@ go to http://localhost:8080/h2-console
 
 ## Use of AI and AutoComplete
 
-this project used chatGTP to help with:
+this project used gpt to help with:
 
-- autocompletion of lines (especially comments and strings)
+- autocompletion of lines (mostly comments and strings)
 - attribute generation for classed (dto, entity, getters/setters)
 - setting up application properties
 - generation of this very readme file
-- generation code duplication: AddressEntity was created by AI based on an 
-  already created CustomerEntity architecture.
 
-** Basically all labour work has been copied from AI. **
+** Basically all labour non-technical work has been done by AI. **
 
 
 
