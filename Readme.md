@@ -136,7 +136,7 @@ Note: AddressData uses a record component named "Country" (capital C) by design;
    mvn spring-boot:run
    ```
 
-3. call the api using one of the methods below.
+3. call the api using one of the methods below. make sure that all the fields are filled because they are mandatory. Including an external identifier which should be unique to the customer.
 
 #### Swagger UI
 
@@ -182,6 +182,7 @@ this project used gpt to help with:
 
 ## What this API lacks
 
+- forgot to add: when the customer exist and another request comes in with the same external identifier, there should be a check to see if the requested data is the same as the persisted data which is not there. in this case an error should be returned to the user of the endpoint saying that a user exists but the request doesnt match.
 - removing the photo from the file storage when the customer is not created 
    due to technical errors.
 - integration test for when the customer already exists. (not needed for demo
