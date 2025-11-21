@@ -18,7 +18,21 @@ public class DomainEntityExceptionAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity <InternalError> handleGenericException(Exception ex) {
+    public ResponseEntity <InternalError> handleGenericException(IllegalArgumentException ex) {
+        InternalError body =
+                new InternalError("internal error:" + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity <InternalError> handleGenericException(IllegalStateException ex) {
+        InternalError body =
+                new InternalError("internal error:" + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity <InternalError> handleGenericException(NullPointerException ex) {
         InternalError body =
                 new InternalError("internal error:" + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
