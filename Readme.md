@@ -7,8 +7,44 @@
 
 ## How to run
 
+1. build the project using maven:
+   ```bash
+   mvn clean install
+   ```
+   
+2. run the spring boot application:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+3. call the api using one of the methods below.
+
+
+#### Using Postman
+
+- import the provided Postman collection file 
+  [Customer Onboarding API.postman_collection.json](./collection/CustomerOnboarding.postman_collection.json)
+  into your Postman application.
+
+#### Swagger UI
+
+http://localhost:8083/swagger-ui/index.html
+
+
+
+4. to check out the data in the database, you can use the H2 console:
+
+#### H2Database
+For simplicity, this project uses an in-memory H2 database to store customer data.
+However, by changing the settings in the application.properties file, you can easily switch
+to another database like MySQL or PostgreSQL.
+
 note: to see the h2 database console while running the API application,
-go to http://localhost:8080/h2-console
+go to http://localhost:8083/h2-console
+
+ - JDBC URL:  jdbc:h2:mem:onboarding
+ - username sa
+ - password: (leave blank)
 
 
 ## Use of AI and AutoComplete

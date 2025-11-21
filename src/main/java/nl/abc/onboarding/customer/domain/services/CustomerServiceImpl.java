@@ -70,6 +70,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CompletableFuture<CustomerData> toCustomerData(
             CustomerServiceData data) {
-        return CompletableFuture.completedFuture(data.customerEntity.toDataTransferObject());
+        if (data.readCustomerResult != null) {
+            return CompletableFuture.completedFuture(data.readCustomerResult);
+        } else if (data.writeCustomerResult != null) {
+            return CompletableFuture.completedFuture(data.writeCustomerResult);
+        }
+        throw new IllegalStateException("No customer data found after onboarding process");
     }
 }

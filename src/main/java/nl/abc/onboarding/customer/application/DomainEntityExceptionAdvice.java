@@ -17,8 +17,8 @@ public class DomainEntityExceptionAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<InternalError> handleNullPointerException(NullPointerException ex) {
+    @ExceptionHandler
+    public ResponseEntity <InternalError> handleGenericException(Exception ex) {
         InternalError body =
                 new InternalError("internal error:" + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);

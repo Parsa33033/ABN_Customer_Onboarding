@@ -48,8 +48,8 @@ public class CustomerApplication {
     @PostMapping(value = "/onboarding", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CustomerResponse> onboard(
             @RequestPart("data") CustomerRequest request,
-            @RequestPart("photo") MultipartFile photo,
-            @RequestPart("id-document") MultipartFile idDocument
+            @RequestPart(value = "photo", required = false) MultipartFile photo,
+            @RequestPart(value = "id-document", required = false) MultipartFile idDocument
     ) throws ExecutionException, InterruptedException {
 
        CustomerResponse customerResponse =
