@@ -1,74 +1,66 @@
 @startuml
-title Onboard Customer - Application / Domain / Infrastructure
+title Onboard flow: /onboarding -> CustomerService -> CustomerInteractionRepositoryImpl
 
-participant "Application" as App
-participant "OnboardCustomerService (Domain)" as Domain
-participant "FilePersistenceOperation (Domain)" as FPO
-participant "FilePersistenceRepository (Infra)" as FPR
-participant "CreateCustomerOperation (Domain)" as CCO
-participant "CustomerRepository (Infra)" as CR
+actor Client
+participant "CustomerApplication\n(onboard)" as App
+participant "FileStorage" as FS
+participant "CustomerServiceImpl\n(onboard)" as CS
+participant "CustomerInteractionRepositoryImpl" as RepoImpl
+participant "CustomerRepository (JPA)" as Jpa
 
-App -> Domain : onboardCustomer(request)
-activate Domain
+Client -> App : POST /onboarding (data, photo, idDocument)
+activate App
 
-Domain -> FPO : persist(file)
-activate FPO
+App -> App : mapRequestAndGenerateInternalIdentifier()
+note right: creates CustomerApplicationData\nwith externalIdentifier
 
-FPO -> FPR : persist(file)
-activate FPR
-
-alt persist unsuccessful
-    FPR --> FPO : error
-    deactivate FPR
-
-    FPO --> Domain : error
-    deactivate FPO
-
-    Domain --> App : error
-    deactivate Domain
-else persist successful
-    FPR --> FPO : success
-    deactivate FPR
-
-    FPO --> Domain : filePersisted
-    deactivate FPO
-
-    Domain -> CCO : create(customer)
-    activate CCO
-
-    CCO -> CR : save(customer)
-    activate CR
-
-    alt save unsuccessful
-        CR --> CCO : error
-        deactivate CR
-
-        CCO -> FPO : delete(file)
-        activate FPO
-
-        FPO -> FPR : delete(file)
-        activate FPR
-        FPR --> FPO : deleted
-        deactivate FPR
-
-        FPO --> CCO : deleted
-        deactivate FPO
-
-        CCO --> Domain : error
-        deactivate CCO
-
-        Domain --> App : error
-        deactivate Domain
-    else save successful
-        CR --> CCO : saved
-        deactivate CR
-
-        CCO --> Domain : success
-        deactivate CCO
-
-        Domain --> App : success
-        deactivate Domain
-    end
+alt photo present
+  App -> FS : persist(photo, externalIdentifier, FileType.PHOTO)
+  activate FS
+  FS --> App : photoPath (CompletableFuture)
+  deactivate FS
 end
 
+alt id document present
+  App -> FS : persist(idDocument, externalIdentifier, FileType.ID)
+  activate FS
+  FS --> App : idDocumentPath (CompletableFuture)
+  deactivate FS
+end
+
+App -> CS : customerService.onboard(customerData)
+activate CS
+
+CS -> CS : validate(customerData)
+CS -> RepoImpl : readByExternalIdentifier(externalIdentifier)
+activate RepoImpl
+
+RepoImpl -> Jpa : findByExternalIdentifier(externalIdentifier)
+activate Jpa
+Jpa --> RepoImpl : Optional<Customer> (found / empty)
+deactivate Jpa
+
+RepoImpl --> CS : Optional<CustomerData> (CompletableFuture)
+deactivate RepoImpl
+
+alt customer found
+  CS -> CS : set readCustomerResult
+else customer not found
+  CS -> RepoImpl : write(customerDto)
+  activate RepoImpl
+  RepoImpl -> Jpa : save(Customer entity)
+  activate Jpa
+  Jpa --> RepoImpl : saved Customer
+  deactivate Jpa
+  RepoImpl --> CS : saved CustomerData (CompletableFuture)
+  deactivate RepoImpl
+end
+
+CS -> CS : toCustomerData() -> CustomerData
+CS --> App : CustomerData (CompletableFuture)
+deactivate CS
+
+App -> App : CustomerResponse.from(CustomerData)
+App --> Client : 200 OK CustomerResponse
+deactivate App
 @enduml

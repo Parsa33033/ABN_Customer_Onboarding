@@ -2,6 +2,58 @@
 
 ## Design
 
+Design Decision Records (DDR):
+
+The requirements for this project were:
+1) simplicity
+2) readability
+3) maintainability
+4) extensibility
+5) use of best practices
+
+To meet these requirements, the following design decisions were made:
+- **User of Hexagonal Architecture**: This architecture pattern was 
+  chosen to 
+  separate the core business logic from the infrastructure and external 
+  systems. This makes the codebase more maintainable and extensible.
+- **Use of Entity Domain Objects (from DDD)**: This approach was chosen to 
+  encapsulate the business logic and rules within the domain objects, making 
+  the code more readable and maintainable. Also validation goes through 
+  these domain objects making the service layer thinner.
+
+#### Layers:
+
+
+- [Application Layer](./src/main/java/nl/abc/onboarding/customer/application/CustomerApplication.java)
+  
+    This layer does the following:
+    - generate a new UUID identifier for the customer
+    - save the photo and return the path
+    - save the id document and return the path
+    - call the domain customer onboarding service operation with the new 
+      identifier, photo path, and id document path
+
+
+- [Domain Layer](./src/main/java/nl/abc/onboarding/customer/domain/services/CustomerServiceImpl.java)
+
+  This layer does the following:
+    - validate the customer data according to business rules through Domain 
+      Entity object creation (CustomerEntity)
+    - read the customer by external id from the repository
+    - if the customer already exists, return the customer
+    - if the customer does not exist, create a new customer entity
+
+
+- [Infrastructure Layer](./src/main/java/nl/abc/onboarding/customer/infrastructure/repositories/CustomerInteractionRepositoryImpl.java)
+
+  This layer does the following:
+    - read the customer data from the database by external id
+    - save the customer data to the database
+  
+
+#### Architecture Diagram:
+
+
 ![Architecture diagram](./design/sequence-model-onboard-customer.png)
 
 
@@ -78,7 +130,7 @@ this project used gpt to help with:
 
 - removing the photo from the file storage when the customer is not created 
    due to technical errors.
-- integration test for when the customer already exists. (not needed for demo )
+- integration test for when the customer already exists. (not needed for demo
    purposes)
 
 
