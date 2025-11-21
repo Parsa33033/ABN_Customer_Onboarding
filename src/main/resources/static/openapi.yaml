@@ -60,6 +60,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomerResponse'
+              examples:
+                success:
+                  summary: Example successful onboarding response
+                  value:
+                    identifier: "11111111-2222-3333-4444-555555555555"
+                    externalIdentifier: "ext-123"
+                    loginInstructions: "User your external identifier as username and password: 11111111"
         '400':
           description: Validation or domain error
           content:
@@ -152,9 +159,17 @@ components:
           format: uuid
         externalIdentifier:
           type: string
+        loginInstructions:
+          type: string
+          description: Instructions for initial login including a temporary password generated from the identifier.
       required:
         - identifier
         - externalIdentifier
+        - loginInstructions
+      example:
+        identifier: "11111111-2222-3333-4444-555555555555"
+        externalIdentifier: "ext-123"
+        loginInstructions: "User your external identifier as username and password: 11111111"
     InvalidRequest:
       type: object
       properties:

@@ -17,14 +17,16 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.UUID;
 
+import static nl.abc.onboarding.customer.application.response.CustomerResponse.generateInstructions;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class CustomerApplicationIT {
 
     private record FileRecord(Path picDir, Path idDir, Path jsonTemp,
-                              Path photo, Path idDoc) implements AutoCloseable{
+                              Path photo, Path idDoc) implements AutoCloseable {
         @Override
         public void close() throws Exception {
             Files.deleteIfExists(this.photo());
@@ -58,10 +60,12 @@ public class CustomerApplicationIT {
 
             String identifier = response.jsonPath().getString("identifier");
             String externalIdentifier = response.jsonPath().getString("externalIdentifier");
+            String loginInstructions = response.jsonPath().getString("loginInstructions");
 
             // THEN
             assertNotNull(identifier);
             assertEquals("ext-123", externalIdentifier);
+            assertEquals(generateInstructions(UUID.fromString(identifier)), loginInstructions);
             assertFileDirectory(fileRecord);
         }
     }

@@ -53,7 +53,7 @@ to another database like MySQL or PostgreSQL.
 note: to see the h2 database console while running the API application,
 go to http://localhost:8083/h2-console
 
- - JDBC URL:  jdbc:h2:mem:onboarding
+ - JDBC URL: jdbc:h2:mem:onboarding
  - username sa
  - password: (leave blank)
 
@@ -69,6 +69,7 @@ this project used gpt to help with:
 - generation of this very readme file
 - creation of file storage (methods that have been created by AI has javadoc 
   that mentions it was created by AI)
+- Generation of swagger yaml file
 
 ** Basically all labour non-technical work has been done by AI. **
 
@@ -77,7 +78,7 @@ this project used gpt to help with:
 
 - removing the photo from the file storage when the customer is not created 
    due to technical errors.
-- intergration test for when the customer already exists. (not needed for demo )
+- integration test for when the customer already exists. (not needed for demo )
    purposes)
 
 
