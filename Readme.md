@@ -19,6 +19,10 @@
 
 3. call the api using one of the methods below.
 
+#### Swagger UI
+
+http://localhost:8083/swagger-ui.html
+
 
 #### Using Postman
 
@@ -26,10 +30,17 @@
   [Customer Onboarding API.postman_collection.json](./collection/CustomerOnboarding.postman_collection.json)
   into your Postman application.
 
-#### Swagger UI
+#### docker
 
-http://localhost:8083/swagger-ui/index.html
+Not necessary for this project.
 
+But if you want to run the application in a docker container.
+- download docker
+- run docker
+- build image for your required database
+- run the container with the spring application and assign the database 
+  conatinaer volume to the application container
+- adjust the application.properties file to point to the database container
 
 
 4. to check out the data in the database, you can use the H2 console:

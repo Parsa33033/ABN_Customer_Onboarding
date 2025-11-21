@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Customer Onboarding API
+  version: 1.0.0
+  description: API to onboard customers with optional photo and ID document uploads.
+servers:
+  - url: http://localhost:8083
+    description: Local server
+paths:
+  /onboarding:
+    post:
+      tags:
+        - Customer
+      summary: Onboard a customer
+      description: >-
+        Onboard a customer by sending a multipart/form-data request containing the
+        JSON "data" part and file parts for "photo" and "id-document".
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  $ref: '#/components/schemas/CustomerRequest'
+                photo:
+                  type: string
+                  format: binary
+                  description: Optional customer photo
+                id-document:
+                  type: string
+                  format: binary
+                  description: Optional government-issued ID document
+            example:
+              data:
+                externalIdentifier: ext-123
+                firstName: John
+                lastName: Doe
+                gender: Male
+                dateOfBirth: "1990-01-01"
+                phoneNumber: "0612345678"
+                email: john.doe@example.com
+                nationality: NL
+                residentialAddress:
+                  address: Main Street 1
+                  zipCode: 1234AB
+                  city: Amsterdam
+                  country: NL
+                socialSecurityNumber: 123-45-6789
+            encoding:
+              data:
+                contentType: application/json
+      responses:
+        '200':
+          description: Customer onboarded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '400':
+          description: Validation or domain error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+components:
+  schemas:
+    AddressRequest:
+      type: object
+      properties:
+        address:
+          type: string
+          maxLength: 120
+        zipCode:
+          type: string
+          maxLength: 120
+        city:
+          type: string
+          maxLength: 120
+        country:
+          type: string
+          maxLength: 120
+    CustomerRequest:
+      type: object
+      properties:
+        externalIdentifier:
+          type: string
+          maxLength: 120
+        firstName:
+          type: string
+          maxLength: 120
+        lastName:
+          type: string
+          maxLength: 120
+        gender:
+          type: string
+          maxLength: 120
+        dateOfBirth:
+          type: string
+          format: date
+        phoneNumber:
+          type: string
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          maxLength: 120
+        nationality:
+          type: string
+          maxLength: 120
+        residentialAddress:
+          $ref: '#/components/schemas/AddressRequest'
+        socialSecurityNumber:
+          type: string
+          maxLength: 120
+        idDocumentPath:
+          type: string
+          maxLength: 120
+        photoPath:
+          type: string
+          maxLength: 120
+      required: []
+      example:
+        externalIdentifier: ext-123
+        firstName: John
+        lastName: Doe
+        gender: Male
+        dateOfBirth: "1990-01-01"
+        phoneNumber: "0612345678"
+        email: john.doe@example.com
+        nationality: NL
+        residentialAddress:
+          address: Main Street 1
+          zipCode: 1234AB
+          city: Amsterdam
+          country: NL
+        socialSecurityNumber: 123-45-6789
+    CustomerResponse:
+      type: object
+      properties:
+        identifier:
+          type: string
+          format: uuid
+        externalIdentifier:
+          type: string
+      required:
+        - identifier
+        - externalIdentifier
+    InvalidRequest:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    InternalError:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
