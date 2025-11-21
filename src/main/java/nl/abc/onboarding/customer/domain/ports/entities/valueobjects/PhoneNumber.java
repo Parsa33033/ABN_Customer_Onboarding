@@ -16,12 +16,19 @@ public class PhoneNumber implements ValueObject<String> {
 
     @Override
     public void validate(String value) {
+        // the regex pattern was created by AI
         if (value == null || value.trim().isEmpty()) {
             throw new IllegalArgumentException("Phone number cannot be null or empty");
         }
-        // Accepts optional country code and common separators: spaces, dashes, dots, and parentheses
-        Pattern phonePattern = Pattern.compile("^(\\+\\d{1,3}[- ]?)?\\(?\\d{1,4}\\)?[- .]?\\d{1,4}[- .]?\\d{1,9}$");
-        if (!phonePattern.matcher(value).matches()) {
+        // Normalize common separators while keeping leading '+'
+        String normalized = value.replaceAll("[\\s().-]", "");
+
+        // E.164: +[country][number], 8-15 digits total (excluding '+')
+        boolean isE164 = Pattern.compile("^\\+[1-9]\\d{7,14}$").matcher(normalized).matches();
+        // NL local: 10 digits starting with 0 (e.g., 0612345678)
+        boolean isNlLocal = Pattern.compile("^0\\d{9}$").matcher(normalized).matches();
+
+        if (!(isE164 || isNlLocal)) {
             throw new PhoneNumberNotValidException(value);
         }
     }
@@ -31,4 +38,3 @@ public class PhoneNumber implements ValueObject<String> {
         return this.value;
     }
 }
-

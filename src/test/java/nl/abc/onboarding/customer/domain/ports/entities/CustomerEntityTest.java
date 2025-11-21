@@ -81,7 +81,7 @@ public class CustomerEntityTest {
                 () -> CustomerEntity.build().fromDataTransferObject(expected));
 
         Assertions.assertEquals(
-                "The phoneNumber 'invalid phone number' is not valid.",
+                "The phoneNumber 'invalid phone number' is not valid. Examples: +31612345678, 0612345678.",
                 exception.getMessage());
 
     }

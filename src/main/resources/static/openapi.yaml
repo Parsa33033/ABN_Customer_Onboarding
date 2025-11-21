@@ -41,7 +41,7 @@ paths:
                 lastName: Doe
                 gender: Male
                 dateOfBirth: "1990-01-01"
-                phoneNumber: "0612345678"
+                phoneNumber: "+31612345678"
                 email: john.doe@example.com
                 nationality: NL
                 residentialAddress:
@@ -117,6 +117,8 @@ components:
         phoneNumber:
           type: string
           maxLength: 120
+          description: Accepts E.164 (e.g., +31612345678) or NL local (e.g., 0612345678). Common separators like spaces, dashes, dots, and parentheses are allowed.
+          example: "+31612345678"
         email:
           type: string
           format: email
@@ -142,7 +144,7 @@ components:
         lastName: Doe
         gender: Male
         dateOfBirth: "1990-01-01"
-        phoneNumber: "0612345678"
+        phoneNumber: "+31612345678"
         email: john.doe@example.com
         nationality: NL
         residentialAddress:
